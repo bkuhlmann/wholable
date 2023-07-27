@@ -6,4 +6,5 @@ require "wholable/freezable"
 
 # Main namespace.
 module Wholable
+  def self.[](...) = Equatable.new(...)
 end
