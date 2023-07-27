@@ -1,0 +1,109 @@
+#! /usr/bin/env ruby
+# frozen_string_literal: true
+
+require "bundler/inline"
+
+gemfile true do
+  source "https://rubygems.org"
+
+  gem "benchmark-ips"
+  gem "debug"
+  gem "wholable", path: ".."
+  gem "dry-equalizer"
+  gem "equatable"
+end
+
+NAME = "demo"
+LABEL = "Demo"
+DESCRIPTION = "A demonstration."
+
+class Equal
+  include Dry::Equalizer(:name, :label, :description)
+
+  attr_reader :name, :label, :description
+
+  def initialize name: NAME, label: LABEL, description: DESCRIPTION
+    @name = name
+    @label = label
+    @description = description
+  end
+end
+
+class Equat
+  include Equatable
+
+  attr_reader :name, :label, :description
+
+  def initialize name: NAME, label: LABEL, description: DESCRIPTION
+    @name = name
+    @label = label
+    @description = description
+  end
+end
+
+class Whole
+  include Wholable[:name, :label, :description]
+
+  def initialize name: NAME, label: LABEL, description: DESCRIPTION
+    @name = name
+    @label = label
+    @description = description
+  end
+end
+
+object = Object.new
+equal = Equal.new
+equat = Equat.new
+whole = Whole.new
+
+Benchmark.ips do |benchmark|
+  benchmark.config time: 5, warmup: 2
+
+  benchmark.report "Equalizer" do
+    equal.name
+    equal.label
+    equal.description
+    equal.hash
+    equal.inspect
+    equal == object
+    equal.eql? object
+  end
+
+  benchmark.report "Equatable" do
+    equat.name
+    equat.label
+    equat.description
+    equat.hash
+    equat.inspect
+    equat == object
+    equat.eql? object
+  end
+
+  benchmark.report "Wholable" do
+    whole.name
+    whole.label
+    whole.description
+    whole.hash
+    whole.inspect
+    whole == object
+    whole.eql? object
+  end
+
+  benchmark.compare!
+end
+
+__END__
+
+Warming up --------------------------------------
+           Equalizer    62.607k i/100ms
+           Equatable    60.707k i/100ms
+            Wholable    62.894k i/100ms
+Calculating -------------------------------------
+           Equalizer    643.924k (± 2.3%) i/s -      3.256M in   5.058386s
+           Equatable    614.434k (± 4.5%) i/s -      3.096M in   5.049327s
+            Wholable    659.091k (± 2.6%) i/s -      3.333M in   5.060748s
+
+Comparison:
+            Wholable:   659091.4 i/s
+           Equalizer:   643924.1 i/s - same-ish: difference falls within error
+           Equatable:   614434.2 i/s - same-ish: difference falls within error
