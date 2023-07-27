@@ -2,4 +2,10 @@
 
 == 0.0.0 (2023-07-27)
 
-* Added initial implementation.
+* Added benchmark - Brooke Kuhlmann
+* Added comparable module - Brooke Kuhlmann
+* Added documentation - Brooke Kuhlmann
+* Added equatable module - Brooke Kuhlmann
+* Added freezable module - Brooke Kuhlmann
+* Added primary Object API - Brooke Kuhlmann
+* Added project skeleton - Brooke Kuhlmann

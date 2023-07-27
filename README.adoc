@@ -2,13 +2,20 @@
 :toclevels: 5
 :figure-caption!:
 
+:data_link: link:https://alchemists.io/articles/ruby_data[Data]
+
 = Wholable
+
+Wholable is a mixin that turns a class into a _whole value object_ by ensuring object equality is determined by the values that make up the object instead of by identity within memory.
 
 toc::[]
 
 == Features
 
-== Screencasts
+* Ensures equality (i.e. `#==` and `#eql?`) is determined by attribute values and not object identity (i.e. `#equal?`).
+* Automatically defines public attribute readers (i.e. `.attr_reader`) based on provided keys.
+* Ensures object inspection (i.e. `#inspect`) shows all registered attributes.
+* Ensures object is frozen upon initialization.
 
 == Requirements
 
@@ -47,6 +54,72 @@ require "wholable"
 ----
 
 == Usage
+
+To use, include Wholable along with a list of attributes that make up your whole value object:
+
+[source,ruby]
+----
+class Person
+  include Wholable[:name, :email]
+
+  def initialize name:, email:
+    @name = name
+    @email = email
+  end
+end
+
+jill = Person.new name: "Jill Smith", email: "jill@example.com"
+jill_two = Person.new name: "Jill Smith", email: "jill@example.com"
+jack = Person.new name: "Jack Smith", email: "jack@example.com"
+
+jill.frozen?          # true
+jill_two.frozen?      # true
+jack.frozen?          # true
+
+jill.inspect          # "#<Person @name=\"Jill Smith\", @email=\"jill@example.com\">"
+jill_two.inspect      # "#<Person @name=\"Jill Smith\", @email=\"jill@example.com\">"
+jack.inspect          # "#<Person @name=\"Jack Smith\", @email=\"jack@example.com\">"
+
+jill.name             # "Jill Smith"
+jill.email            # "jill@example.com"
+
+jill == jill          # true
+jill == jill_two      # true
+jill == jack          # false
+
+jill.eql? jill        # true
+jill.eql? jill_two    # true
+jill.eql? jack        # false
+
+jill.equal? jill      # true
+jill.equal? jill_two  # false
+jill.equal? jack      # false
+
+jill.hash             # 3650965837788801745
+jill_two.hash         # 3650965837788801745
+jack.hash             # 4460658980509842640
+----
+
+As you can see, object equality is determined by the object's values and not by the object's identity. When you include `Wholable` along with a list of keys, the following happens:
+
+. The corresponding _public_ `attr_reader` for each key will be created which saves you time and reduces double entry.
+. The object will be immediately frozen after initialization to ensure your instance is _immutable_ by default.
+
+== Caveats
+
+The whole value contract created for you when using this gem can be broken by doing the following:
+
+* *Duplication*: Sending the `#dub` message will cause your whole value object to be unfrozen. This might be desired in certain situations but make sure to refreeze when able.
+* *Post Attributes*: Adding additional attributes after what is defined when including `Wholable` will break your whole value object contract so ensure you let Wholable manage this for you.
+* *Deep Freezing*: The automatic freezing of your instances is shallow and will not deeply freeze nested attributes. This behavior mimics the behavior of {data_link} objects.
+
+== Influences
+
+This implementation is based upon these original designs:
+
+- link:https://github.com/dkubb/equalizer[Equalizer]: One of the first implementations that is over a decade old and no longer maintained.
+- link:https://github.com/dry-rb/dry-equalizer[Dry Equalizer]: Deprecated and no longer maintained but was based upon the above implementation. A version of this has moved into link:https://dry-rb.org/gems/dry-core[Dry Core] but doesn't appear to work properly or be well supported. Even the documentation is not fully linked on the main page.
+- link:https://github.com/piotrmurach/equatable/tree/master[Equatable]: A similar implementation to the above but is based off what you define via your `.attr_reader`. The project hasn't been maintained or updated in several years now.
 
 == Development
 
