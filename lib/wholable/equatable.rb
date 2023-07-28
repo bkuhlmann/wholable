@@ -45,7 +45,7 @@ module Wholable
         klass = self.class
         name = klass.name || klass.inspect
 
-        local_keys.map { |key| %(@#{key}=#{public_send(key).inspect}) }
+        local_keys.map { |key| "@#{key}=#{public_send(key).inspect}" }
                   .join(", ")
                   .then { |pairs| "#<#{name} #{pairs}>" }
       end

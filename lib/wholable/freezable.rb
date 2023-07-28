@@ -4,7 +4,7 @@ module Wholable
   # Ensures an object is frozen after being initialized.
   module Freezable
     def initialize(...)
-      super(...)
+      super
       freeze
     end
   end
