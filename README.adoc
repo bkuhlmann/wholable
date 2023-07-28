@@ -3,10 +3,16 @@
 :figure-caption!:
 
 :data_link: link:https://alchemists.io/articles/ruby_data[Data]
+:ruby_link: link:https://www.ruby-lang.org[Ruby]
+:structs_link: link:https://alchemists.io/articles/ruby_structs[Structs]
 
 = Wholable
 
-Wholable is a mixin that turns a class into a _whole value object_ by ensuring object equality is determined by the values that make up the object instead of by identity within memory.
+Wholable is a mixin that allows you to turn your object into a _whole value object_ by ensuring object equality is determined by the values of the object instead of by identity. Whole value objects -- or value objects in general -- have the following traits as also noted via link:https://en.wikipedia.org/wiki/Value_object[Wikipedia]:
+
+* Equality is determined by the values that make up an object and not by link:https://en.wikipedia.org/wiki/Identity_(object-oriented_programming)[identity] (i.e. memory address) which is the default behavior for all {ruby_link} objects except for {data_link} and {structs_link}.
+* Identity remains unique since two objects can have the same values but different identity. This means `BasicObject#equal?` is never overwritten -- which is strongly discouraged -- as per link:https://rubyapi.org/o/basicobject#method-i-3D-3D[BasicObject] documentation.
+* Value objects should be immutable (i.e. frozen) by default. This implementation enforces a strict adherence to immutability in order to ensure value objects remain equal and discourage mutation.
 
 toc::[]
 
@@ -19,7 +25,7 @@ toc::[]
 
 == Requirements
 
-. link:https://www.ruby-lang.org[Ruby].
+. {ruby_link}.
 
 == Setup
 
@@ -72,6 +78,9 @@ jill = Person.new name: "Jill Smith", email: "jill@example.com"
 jill_two = Person.new name: "Jill Smith", email: "jill@example.com"
 jack = Person.new name: "Jack Smith", email: "jack@example.com"
 
+jill.name             # "Jill Smith"
+jill.email            # "jill@example.com"
+
 jill.frozen?          # true
 jill_two.frozen?      # true
 jack.frozen?          # true
@@ -79,9 +88,6 @@ jack.frozen?          # true
 jill.inspect          # "#<Person @name=\"Jill Smith\", @email=\"jill@example.com\">"
 jill_two.inspect      # "#<Person @name=\"Jill Smith\", @email=\"jill@example.com\">"
 jack.inspect          # "#<Person @name=\"Jack Smith\", @email=\"jack@example.com\">"
-
-jill.name             # "Jill Smith"
-jill.email            # "jill@example.com"
 
 jill == jill          # true
 jill == jill_two      # true
@@ -100,17 +106,18 @@ jill_two.hash         # 3650965837788801745
 jack.hash             # 4460658980509842640
 ----
 
-As you can see, object equality is determined by the object's values and not by the object's identity. When you include `Wholable` along with a list of keys, the following happens:
+As you can see, object equality is determined by the object's values and _not_ by the object's identity. When you include `Wholable` along with a list of keys, the following happens:
 
-. The corresponding _public_ `attr_reader` for each key will be created which saves you time and reduces double entry.
-. The object will be immediately frozen after initialization to ensure your instance is _immutable_ by default.
+. The corresponding _public_ `attr_reader` for each key is created which saves you time and reduces double entry.
+. Custom `#==`, `#eql?`, `#hash`, and `#inspect` methods are added to provide whole value behavior.
+. The object is immediately frozen after initialization to ensure your instance is _immutable_ by default.
 
 == Caveats
 
-The whole value contract created for you when using this gem can be broken by doing the following:
+Whole values can be broken via the following:
 
-* *Duplication*: Sending the `#dub` message will cause your whole value object to be unfrozen. This might be desired in certain situations but make sure to refreeze when able.
-* *Post Attributes*: Adding additional attributes after what is defined when including `Wholable` will break your whole value object contract so ensure you let Wholable manage this for you.
+* *Duplication*: Sending the `#dup` message will cause your whole value object to be unfrozen. This might be desired in certain situations but make sure to refreeze when able.
+* *Post Attributes*: Adding additional attributes after what is defined when including `Wholable` will break your whole value object. To prevent this, let Wholable manage this for you (easiest). Otherwise (harder), you can manually override `#==`, `#eql?`, `#hash`, and `#inspect` behavior at which point you probably don't need Wholable anymore.
 * *Deep Freezing*: The automatic freezing of your instances is shallow and will not deeply freeze nested attributes. This behavior mimics the behavior of {data_link} objects.
 
 == Influences
@@ -119,7 +126,7 @@ This implementation is based upon these original designs:
 
 - link:https://github.com/dkubb/equalizer[Equalizer]: One of the first implementations that is over a decade old and no longer maintained.
 - link:https://github.com/dry-rb/dry-equalizer[Dry Equalizer]: Deprecated and no longer maintained but was based upon the above implementation. A version of this has moved into link:https://dry-rb.org/gems/dry-core[Dry Core] but doesn't appear to work properly or be well supported. Even the documentation is not fully linked on the main page.
-- link:https://github.com/piotrmurach/equatable/tree/master[Equatable]: A similar implementation to the above but is based off what you define via your `.attr_reader`. The project hasn't been maintained or updated in several years now.
+- link:https://github.com/piotrmurach/equatable/tree/master[Equatable]: A similar implementation to the above but is based off what you define via your `.attr_reader`. The project hasn't been maintained or updated in several years.
 
 == Development
 
