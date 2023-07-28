@@ -8,3 +8,6 @@ detectors:
   ModuleInitialize:
     exclude:
       - "Wholable::Freezable"
+  TooManyStatements:
+    exclude:
+      - "Wholable::Equatable#define_inspec"

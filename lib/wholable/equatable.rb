@@ -38,7 +38,6 @@ module Wholable
       end
     end
 
-    # :reek:TooManyStatements
     def define_inspect
       local_keys = keys
 
