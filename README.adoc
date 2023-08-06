@@ -125,7 +125,8 @@ Whole values can be broken via the following:
 This implementation is based upon these original designs:
 
 - link:https://github.com/dkubb/equalizer[Equalizer]: One of the first implementations that is over a decade old and no longer maintained.
-- link:https://github.com/dry-rb/dry-equalizer[Dry Equalizer]: Deprecated and no longer maintained but was based upon the above implementation. A version of this has moved into link:https://dry-rb.org/gems/dry-core[Dry Core] but doesn't appear to work properly or be well supported. Even the documentation is not fully linked on the main page.
+- link:https://github.com/dry-rb/dry-equalizer[Dry Equalizer]: Deprecated and no longer maintained but was based upon the above implementation and has now moved into Dry Core.
+- link:https://dry-rb.org/gems/dry-core[Dry Core]: Includes the link:https://dry-rb.org/gems/dry-core/equalizer[Dry::Core::Equalizer] module which is officially supported and actively maintained by the Dry RB team. A good alternative to this gem.
 - link:https://github.com/piotrmurach/equatable/tree/master[Equatable]: A similar implementation to the above but is based off what you define via your `.attr_reader`. The project hasn't been maintained or updated in several years.
 
 == Development
