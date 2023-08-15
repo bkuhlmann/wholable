@@ -88,4 +88,10 @@ RSpec.describe Wholable::Equatable do
       expect(whole.inspect).to match(/#<#<Class:.+{18}>\s@name="test",\s@label="Test">/)
     end
   end
+
+  describe "#to_h" do
+    it "answers hash" do
+      expect(whole.to_h).to eq(name: "test", label: "Test")
+    end
+  end
 end

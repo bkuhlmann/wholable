@@ -6,8 +6,7 @@ module Wholable
     def initialize *keys
       super()
       @keys = keys.uniq
-      define_hash
-      define_inspect
+      define_instance_methods
       freeze
     end
 
@@ -21,6 +20,12 @@ module Wholable
     private
 
     attr_reader :keys
+
+    def define_instance_methods
+      define_hash
+      define_inspect
+      define_to_h
+    end
 
     def define_readers descendant
       descendant.class_eval <<-READERS, __FILE__, __LINE__ + 1
@@ -48,6 +53,14 @@ module Wholable
         local_keys.map { |key| "@#{key}=#{public_send(key).inspect}" }
                   .join(", ")
                   .then { |pairs| "#<#{name} #{pairs}>" }
+      end
+    end
+
+    def define_to_h
+      local_keys = keys
+
+      define_method :to_h do
+        local_keys.each.with_object({}) { |key, dictionary| dictionary[key] = public_send key }
       end
     end
   end
