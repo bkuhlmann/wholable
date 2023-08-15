@@ -1,5 +1,13 @@
 = Versions
 
+== 0.1.0 (2023-08-14)
+
+* Added array conversion - Brooke Kuhlmann
+* Added diffability - Brooke Kuhlmann
+* Added hash conversion - Brooke Kuhlmann
+* Added pattern matching - Brooke Kuhlmann
+* Added with - Brooke Kuhlmann
+
 == 0.0.1 (2023-08-06)
 
 * Added Reek configuration to for too many statements - Brooke Kuhlmann

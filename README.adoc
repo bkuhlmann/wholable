@@ -3,7 +3,9 @@
 :figure-caption!:
 
 :data_link: link:https://alchemists.io/articles/ruby_data[Data]
+:pattern_matching_link: link:https://alchemists.io/articles/ruby_pattern_matching[pattern matching]
 :ruby_link: link:https://www.ruby-lang.org[Ruby]
+:data_link: link:https://alchemists.io/articles/ruby_data[Data]
 :structs_link: link:https://alchemists.io/articles/ruby_structs[Structs]
 
 = Wholable
@@ -19,6 +21,8 @@ toc::[]
 == Features
 
 * Ensures equality (i.e. `#==` and `#eql?`) is determined by attribute values and not object identity (i.e. `#equal?`).
+* Allows you to compare two objects of same or different types and see their differences.
+* Provides {pattern_matching_link}.
 * Automatically defines public attribute readers (i.e. `.attr_reader`) based on provided keys.
 * Ensures object inspection (i.e. `#inspect`) shows all registered attributes.
 * Ensures object is frozen upon initialization.
@@ -78,38 +82,56 @@ jill = Person.new name: "Jill Smith", email: "jill@example.com"
 jill_two = Person.new name: "Jill Smith", email: "jill@example.com"
 jack = Person.new name: "Jack Smith", email: "jack@example.com"
 
-jill.name             # "Jill Smith"
-jill.email            # "jill@example.com"
+jill.name              # "Jill Smith"
+jill.email             # "jill@example.com"
 
-jill.frozen?          # true
-jill_two.frozen?      # true
-jack.frozen?          # true
+jill.frozen?           # true
+jill_two.frozen?       # true
+jack.frozen?           # true
 
-jill.inspect          # "#<Person @name=\"Jill Smith\", @email=\"jill@example.com\">"
-jill_two.inspect      # "#<Person @name=\"Jill Smith\", @email=\"jill@example.com\">"
-jack.inspect          # "#<Person @name=\"Jack Smith\", @email=\"jack@example.com\">"
+jill.inspect           # "#<Person @name=\"Jill Smith\", @email=\"jill@example.com\">"
+jill_two.inspect       # "#<Person @name=\"Jill Smith\", @email=\"jill@example.com\">"
+jack.inspect           # "#<Person @name=\"Jack Smith\", @email=\"jack@example.com\">"
 
-jill == jill          # true
-jill == jill_two      # true
-jill == jack          # false
+jill == jill           # true
+jill == jill_two       # true
+jill == jack           # false
 
-jill.eql? jill        # true
-jill.eql? jill_two    # true
-jill.eql? jack        # false
+jill.diff(jill)        # {}
+jill.diff(jack)        # {
+                       #   name: ["Jill Smith", "Jack Smith"],
+                       #   email: ["jill@example.com", "jack@example.com"]
+                       # }
+jill.diff(Object.new)  # {:name=>["Jill Smith", nil], :email=>["jill@example.com", nil]}
 
-jill.equal? jill      # true
-jill.equal? jill_two  # false
-jill.equal? jack      # false
+jill.eql? jill         # true
+jill.eql? jill_two     # true
+jill.eql? jack         # false
 
-jill.hash             # 3650965837788801745
-jill_two.hash         # 3650965837788801745
-jack.hash             # 4460658980509842640
+jill.equal? jill       # true
+jill.equal? jill_two   # false
+jill.equal? jack       # false
+
+jill.hash              # 3650965837788801745
+jill_two.hash          # 3650965837788801745
+jack.hash              # 4460658980509842640
+
+jill.to_a              # ["Jill Smith", "jill@example.com"]
+jack.to_a              # ["Jack Smith", "jack@example.com"]
+
+jill.to_h              # {:name=>"Jill Smith", :email=>"jill@example.com"}
+jack.to_h              # {:name=>"Jack Smith", :email=>"jack@example.com"}
+
+jill.with name: "Sue"  # #<Person @name="Sue", @email="jill@example.com">
+jill.with bad: "!"     # unknown keyword: :bad (ArgumentError)
 ----
 
 As you can see, object equality is determined by the object's values and _not_ by the object's identity. When you include `Wholable` along with a list of keys, the following happens:
 
-. The corresponding _public_ `attr_reader` for each key is created which saves you time and reduces double entry.
-. Custom `#==`, `#eql?`, `#hash`, and `#inspect` methods are added to provide whole value behavior.
+. The corresponding _public_ `attr_reader` for each key is created which saves you time and reduces double entry when implementing your whole value object.
+. The `#to_a` and `#to_h` methods are added for convenience in order to play nice with {data_link} and {structs_link}.
+. The `#deconstruct` and `#deconstruct_keys` aliases are created for you so you can leverage {pattern_matching_link}.
+. Custom `#==`, `#eql?`, `#hash`, `#inspect`, `#to_a`, `#to_h`, and `#with` methods are added to provide whole value behavior.
 . The object is immediately frozen after initialization to ensure your instance is _immutable_ by default.
 
 == Caveats
@@ -117,7 +139,7 @@ As you can see, object equality is determined by the object's values and _not_ b
 Whole values can be broken via the following:
 
 * *Duplication*: Sending the `#dup` message will cause your whole value object to be unfrozen. This might be desired in certain situations but make sure to refreeze when able.
-* *Post Attributes*: Adding additional attributes after what is defined when including `Wholable` will break your whole value object. To prevent this, let Wholable manage this for you (easiest). Otherwise (harder), you can manually override `#==`, `#eql?`, `#hash`, and `#inspect` behavior at which point you probably don't need Wholable anymore.
+* *Post Attributes*: Adding additional attributes after what is defined when including `Wholable` will break your whole value object. To prevent this, let Wholable manage this for you (easiest). Otherwise (harder), you can manually override `#==`, `#eql?`, `#hash`, `#inspect`, `#to_a`, and `#to_h` behavior at which point you don't need Wholable anymore.
 * *Deep Freezing*: The automatic freezing of your instances is shallow and will not deeply freeze nested attributes. This behavior mimics the behavior of {data_link} objects.
 
 == Influences
