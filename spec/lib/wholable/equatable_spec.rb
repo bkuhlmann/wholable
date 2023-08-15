@@ -45,6 +45,18 @@ RSpec.describe Wholable::Equatable do
     end
   end
 
+  describe "#deconstruct" do
+    it "answers array" do
+      expect(whole.deconstruct).to eq(%w[test Test])
+    end
+  end
+
+  describe "#deconstruct_keys" do
+    it "answers hash" do
+      expect(whole.deconstruct_keys).to eq(name: "test", label: "Test")
+    end
+  end
+
   describe "#eql?" do
     it "answers true when values are equal" do
       expect(whole.eql?(similar)).to be(true)

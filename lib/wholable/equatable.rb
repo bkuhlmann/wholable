@@ -12,7 +12,7 @@ module Wholable
 
     def included descendant
       super
-      define_readers descendant
+      define_class_methods descendant
       descendant.include Comparable
       descendant.prepend Freezable
     end
@@ -28,9 +28,27 @@ module Wholable
       define_to_h
     end
 
+    def define_class_methods descendant
+      define_readers descendant
+      define_deconstruct descendant
+      define_deconstruct_keys descendant
+    end
+
     def define_readers descendant
       descendant.class_eval <<-READERS, __FILE__, __LINE__ + 1
         attr_reader #{keys.map(&:inspect).join ", "}
+      READERS
+    end
+
+    def define_deconstruct descendant
+      descendant.class_eval <<-READERS, __FILE__, __LINE__ + 1
+        alias deconstruct to_a
+      READERS
+    end
+
+    def define_deconstruct_keys descendant
+      descendant.class_eval <<-READERS, __FILE__, __LINE__ + 1
+        alias deconstruct_keys to_h
       READERS
     end
 

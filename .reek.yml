@@ -10,4 +10,8 @@ detectors:
       - "Wholable::Freezable"
   TooManyStatements:
     exclude:
-      - "Wholable::Equatable#define_inspec"
+      - "Wholable::Equatable#define_inspect"
+  UtilityFunction:
+    exclude:
+      - "Wholable::Equatable#define_deconstruct"
+      - "Wholable::Equatable#define_deconstruct_keys"
