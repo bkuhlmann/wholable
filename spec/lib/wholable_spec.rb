@@ -57,6 +57,20 @@ RSpec.describe Wholable do
     end
   end
 
+  describe "#diff" do
+    it "answers differences when two instances are not equal" do
+      expect(similar.diff(different)).to eq(name: %w[test odd])
+    end
+
+    it "answers differences when types are different" do
+      expect(whole.diff(Data.define)).to eq(name: ["test", nil], label: ["Test", nil])
+    end
+
+    it "answers empty hash when there are no differences" do
+      expect(whole.diff(similar)).to eq({})
+    end
+  end
+
   describe "#eql?" do
     it "answers true when values are equal" do
       expect(whole.eql?(similar)).to be(true)
