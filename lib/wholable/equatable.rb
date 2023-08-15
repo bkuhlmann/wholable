@@ -24,6 +24,7 @@ module Wholable
     def define_instance_methods
       define_hash
       define_inspect
+      define_to_a
       define_to_h
     end
 
@@ -53,6 +54,14 @@ module Wholable
         local_keys.map { |key| "@#{key}=#{public_send(key).inspect}" }
                   .join(", ")
                   .then { |pairs| "#<#{name} #{pairs}>" }
+      end
+    end
+
+    def define_to_a
+      local_keys = keys
+
+      define_method :to_a do
+        local_keys.reduce([]) { |array, key| array.append public_send(key) }
       end
     end
 

@@ -89,6 +89,12 @@ RSpec.describe Wholable do
     end
   end
 
+  describe "#to_a" do
+    it "answers array" do
+      expect(whole.to_a).to eq(%w[test Test])
+    end
+  end
+
   describe "#to_h" do
     it "answers hash" do
       expect(whole.to_h).to eq(name: "test", label: "Test")
