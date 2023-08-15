@@ -24,6 +24,7 @@ module Wholable
     def define_instance_methods
       define_hash
       define_inspect
+      define_with
       define_to_a
       define_to_h
     end
@@ -50,6 +51,10 @@ module Wholable
       descendant.class_eval <<-READERS, __FILE__, __LINE__ + 1
         alias deconstruct_keys to_h
       READERS
+    end
+
+    def define_with
+      define_method(:with) { |**attributes| self.class.new(**to_h.merge!(attributes)) }
     end
 
     def define_hash

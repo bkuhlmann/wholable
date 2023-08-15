@@ -112,4 +112,20 @@ RSpec.describe Wholable::Equatable do
       expect(whole.to_h).to eq(name: "test", label: "Test")
     end
   end
+
+  describe "#with" do
+    it "answers new instance with defaults" do
+      expect(whole.with).to have_attributes(name: "test", label: "Test")
+    end
+
+    it "answers new instance with partial changes" do
+      modification = whole.with label: "Mod"
+      expect(modification).to have_attributes(name: "test", label: "Mod")
+    end
+
+    it "answers new instance with complete changes" do
+      modification = whole.with name: "mod", label: "Mod"
+      expect(modification).to have_attributes(name: "mod", label: "Mod")
+    end
+  end
 end
