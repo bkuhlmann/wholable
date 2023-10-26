@@ -1,5 +1,11 @@
 = Versions
 
+== 0.1.1 (2023-10-26)
+
+* Updated GitHub issue template with simplified sections - Brooke Kuhlmann
+* Updated to Caliber 0.42.0 - Brooke Kuhlmann
+* Refactored Gemfile to use ruby file syntax - Brooke Kuhlmann
+
 == 0.1.0 (2023-08-14)
 
 * Added array conversion - Brooke Kuhlmann
