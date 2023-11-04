@@ -27,6 +27,7 @@ module Wholable
       define_with
       define_to_a
       define_to_h
+      define_diff
     end
 
     def define_class_methods descendant
@@ -93,6 +94,17 @@ module Wholable
 
       define_method :to_h do
         local_keys.each.with_object({}) { |key, dictionary| dictionary[key] = public_send key }
+      end
+    end
+
+    def define_diff
+      define_method :diff do |other|
+        if other.is_a? self.class
+          to_h.merge!(other.to_h) { |_, one, two| [one, two].uniq }
+              .select { |_, diff| diff.size == 2 }
+        else
+          to_h.each.with_object({}) { |(key, value), diff| diff[key] = [value, nil] }
+        end
       end
     end
   end

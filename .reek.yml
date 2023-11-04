@@ -5,11 +5,16 @@ exclude_paths:
 detectors:
   LongParameterList:
     enabled: false
+  NestedIterators:
+    exclude:
+      - "Wholable::Equatable#define_diff"
   ModuleInitialize:
     exclude:
       - "Wholable::Freezable"
   TooManyStatements:
     exclude:
+      - "Wholable::Equatable#define_diff"
+      - "Wholable::Equatable#define_instance_methods"
       - "Wholable::Equatable#define_inspect"
   UtilityFunction:
     exclude:
