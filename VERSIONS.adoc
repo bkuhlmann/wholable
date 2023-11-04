@@ -1,5 +1,10 @@
 = Versions
 
+== 0.2.0 (2023-11-04)
+
+* Refactored comparable diff as equatable method - Brooke Kuhlmann
+* Refactored specs to use shared examples - Brooke Kuhlmann
+
 == 0.1.1 (2023-10-26)
 
 * Updated GitHub issue template with simplified sections - Brooke Kuhlmann

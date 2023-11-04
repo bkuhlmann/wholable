@@ -130,8 +130,8 @@ As you can see, object equality is determined by the object's values and _not_ b
 
 . The corresponding _public_ `attr_reader` for each key is created which saves you time and reduces double entry when implementing your whole value object.
 . The `#to_a` and `#to_h` methods are added for convenience in order to play nice with {data_link} and {structs_link}.
-. The `#deconstruct` and `#deconstruct_keys` aliases are created for you so you can leverage {pattern_matching_link}.
-. Custom `#==`, `#eql?`, `#hash`, `#inspect`, `#to_a`, `#to_h`, and `#with` methods are added to provide whole value behavior.
+. The `#deconstruct` and `#deconstruct_keys` aliases are created so you can leverage {pattern_matching_link}.
+. The `#==`, `#eql?`, `#hash`, `#inspect`, and `#with` methods are added to provide whole value behavior.
 . The object is immediately frozen after initialization to ensure your instance is _immutable_ by default.
 
 == Caveats
