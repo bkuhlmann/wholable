@@ -94,16 +94,17 @@ end
 
 __END__
 
+ruby 3.3.0 (2023-12-25 revision 5124f9ac75) +YJIT [arm64-darwin23.4.0]
 Warming up --------------------------------------
-           Equalizer    62.607k i/100ms
-           Equatable    60.707k i/100ms
-            Wholable    62.894k i/100ms
+           Equalizer    85.533k i/100ms
+           Equatable    87.077k i/100ms
+            Wholable    83.068k i/100ms
 Calculating -------------------------------------
-           Equalizer    643.924k (± 2.3%) i/s -      3.256M in   5.058386s
-           Equatable    614.434k (± 4.5%) i/s -      3.096M in   5.049327s
-            Wholable    659.091k (± 2.6%) i/s -      3.333M in   5.060748s
+           Equalizer    846.000k (± 2.5%) i/s -      4.277M in   5.057906s
+           Equatable    869.473k (± 2.0%) i/s -      4.354M in   5.009483s
+            Wholable    847.220k (± 2.5%) i/s -      4.236M in   5.003046s
 
 Comparison:
-            Wholable:   659091.4 i/s
-           Equalizer:   643924.1 i/s - same-ish: difference falls within error
-           Equatable:   614434.2 i/s - same-ish: difference falls within error
+           Equatable:   869472.7 i/s
+            Wholable:   847220.2 i/s - same-ish: difference falls within error
+           Equalizer:   846000.1 i/s - same-ish: difference falls within error
