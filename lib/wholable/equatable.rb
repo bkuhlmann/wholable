@@ -37,21 +37,21 @@ module Wholable
     end
 
     def define_readers descendant
-      descendant.class_eval <<-READERS, __FILE__, __LINE__ + 1
+      descendant.class_eval <<-READER, __FILE__, __LINE__ + 1
         attr_reader #{keys.map(&:inspect).join ", "}
-      READERS
+      READER
     end
 
     def define_deconstruct descendant
-      descendant.class_eval <<-READERS, __FILE__, __LINE__ + 1
+      descendant.class_eval <<-ALIAS, __FILE__, __LINE__ + 1
         alias deconstruct to_a
-      READERS
+      ALIAS
     end
 
     def define_deconstruct_keys descendant
-      descendant.class_eval <<-READERS, __FILE__, __LINE__ + 1
+      descendant.class_eval <<-ALIAS, __FILE__, __LINE__ + 1
         alias deconstruct_keys to_h
-      READERS
+      ALIAS
     end
 
     def define_with
