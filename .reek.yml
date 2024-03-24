@@ -3,20 +3,19 @@ exclude_paths:
   - vendor
 
 detectors:
+  FeatureEnvy:
+    exclude:
+      - Wholable::Equatable#define_class_methods
   LongParameterList:
     enabled: false
   NestedIterators:
     exclude:
-      - "Wholable::Equatable#define_diff"
+      - Wholable::Equatable#define_diff
   ModuleInitialize:
     exclude:
-      - "Wholable::Freezable"
+      - Wholable::Freezable
   TooManyStatements:
     exclude:
-      - "Wholable::Equatable#define_diff"
-      - "Wholable::Equatable#define_instance_methods"
-      - "Wholable::Equatable#define_inspect"
-  UtilityFunction:
-    exclude:
-      - "Wholable::Equatable#define_deconstruct"
-      - "Wholable::Equatable#define_deconstruct_keys"
+      - Wholable::Equatable#define_diff
+      - Wholable::Equatable#define_instance_methods
+      - Wholable::Equatable#define_inspect

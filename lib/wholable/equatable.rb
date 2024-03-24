@@ -31,36 +31,19 @@ module Wholable
     end
 
     def define_class_methods descendant
-      define_readers descendant
-      define_deconstruct descendant
-      define_deconstruct_keys descendant
-    end
-
-    def define_readers descendant
       descendant.class_eval <<-READER, __FILE__, __LINE__ + 1
         attr_reader #{keys.map(&:inspect).join ", "}
       READER
-    end
 
-    def define_deconstruct descendant
-      descendant.class_eval <<-ALIAS, __FILE__, __LINE__ + 1
-        alias deconstruct to_a
-      ALIAS
-    end
-
-    def define_deconstruct_keys descendant
-      descendant.class_eval <<-ALIAS, __FILE__, __LINE__ + 1
-        alias deconstruct_keys to_h
-      ALIAS
+      descendant.alias_method :deconstruct, :to_a
+      descendant.alias_method :deconstruct_keys, :to_h
     end
 
     def define_with
       define_method(:with) { |**attributes| self.class.new(**to_h.merge!(attributes)) }
     end
 
-    def define_hash
-      local_keys = keys
-
+    def define_hash local_keys = keys
       define_method :hash do
         local_keys.map { |key| public_send key }
                   .prepend(self.class)
@@ -68,9 +51,7 @@ module Wholable
       end
     end
 
-    def define_inspect
-      local_keys = keys
-
+    def define_inspect local_keys = keys
       define_method :inspect do
         klass = self.class
         name = klass.name || klass.inspect
@@ -81,17 +62,13 @@ module Wholable
       end
     end
 
-    def define_to_a
-      local_keys = keys
-
+    def define_to_a local_keys = keys
       define_method :to_a do
         local_keys.reduce([]) { |array, key| array.append public_send(key) }
       end
     end
 
-    def define_to_h
-      local_keys = keys
-
+    def define_to_h local_keys = keys
       define_method :to_h do
         local_keys.each.with_object({}) { |key, dictionary| dictionary[key] = public_send key }
       end
