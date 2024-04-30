@@ -2,11 +2,11 @@
 
 Gem::Specification.new do |spec|
   spec.name = "wholable"
-  spec.version = "1.2.0"
+  spec.version = "1.3.0"
   spec.authors = ["Brooke Kuhlmann"]
   spec.email = ["brooke@alchemists.io"]
   spec.homepage = "https://alchemists.io/projects/wholable"
-  spec.summary = "A whole value object mixin."
+  spec.summary = "A whole value object enabler."
   spec.license = "Hippocratic-2.1"
 
   spec.metadata = {
