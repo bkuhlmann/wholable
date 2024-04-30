@@ -2,12 +2,12 @@
 
 require "spec_helper"
 
-RSpec.describe Wholable::Equatable do
+RSpec.describe Wholable::Builder do
   subject(:whole) { implementation.new }
 
   let :implementation do
     Class.new do
-      include Wholable::Equatable.new(:name, :label)
+      include Wholable::Builder.new(:name, :label)
 
       def initialize name: "test", label: "Test"
         @name = name

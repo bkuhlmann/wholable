@@ -2,7 +2,7 @@
 
 module Wholable
   # Provides core equality behavior.
-  class Equatable < Module
+  class Builder < Module
     def initialize *keys
       super()
       @keys = keys.uniq

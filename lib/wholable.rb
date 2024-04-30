@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-require "wholable/equatable"
+require "wholable/builder"
 
 # Main namespace.
 module Wholable
-  def self.[](...) = Equatable.new(...)
+  def self.[](*) = Builder.new(*)
 end
