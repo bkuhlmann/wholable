@@ -6,31 +6,13 @@ module Wholable
     def initialize *keys
       super()
       @keys = keys.uniq
-      define_instance_methods
+      private_methods.grep(/\A(define)_/).sort.each { |method| __send__ method }
       freeze
     end
 
     def included descendant
       super
-      define_class_methods descendant
-    end
 
-    private
-
-    attr_reader :keys
-
-    def define_instance_methods
-      define_diff
-      define_eql
-      define_equality
-      define_hash
-      define_inspect
-      define_to_a
-      define_to_h
-      define_with
-    end
-
-    def define_class_methods descendant
       descendant.class_eval <<-READER, __FILE__, __LINE__ + 1
         def self.new(...) = super.freeze
 
@@ -40,6 +22,10 @@ module Wholable
       descendant.alias_method :deconstruct, :to_a
       descendant.alias_method :deconstruct_keys, :to_h
     end
+
+    private
+
+    attr_reader :keys
 
     def define_diff
       define_method :diff do |other|
