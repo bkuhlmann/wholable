@@ -13,7 +13,6 @@ module Wholable
     def included descendant
       super
       define_class_methods descendant
-      descendant.prepend Freezable
     end
 
     private
@@ -33,6 +32,8 @@ module Wholable
 
     def define_class_methods descendant
       descendant.class_eval <<-READER, __FILE__, __LINE__ + 1
+        def self.new(...) = super.freeze
+
         attr_reader #{keys.map(&:inspect).join ", "}
       READER
 
