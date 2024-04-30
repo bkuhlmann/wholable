@@ -8,9 +8,9 @@ gemfile true do
 
   gem "benchmark-ips"
   gem "debug"
-  gem "wholable", path: ".."
   gem "dry-equalizer"
   gem "equatable"
+  gem "wholable", path: ".."
 end
 
 NAME = "demo"
@@ -94,17 +94,17 @@ end
 
 __END__
 
-ruby 3.3.0 (2023-12-25 revision 5124f9ac75) +YJIT [arm64-darwin23.4.0]
+ruby 3.3.1 (2024-04-23 revision c56cd86388) +YJIT [arm64-darwin23.4.0]
 Warming up --------------------------------------
-           Equalizer    85.533k i/100ms
-           Equatable    87.077k i/100ms
-            Wholable    83.068k i/100ms
+           Equalizer    81.905k i/100ms
+           Equatable    79.996k i/100ms
+            Wholable    79.165k i/100ms
 Calculating -------------------------------------
-           Equalizer    846.000k (± 2.5%) i/s -      4.277M in   5.057906s
-           Equatable    869.473k (± 2.0%) i/s -      4.354M in   5.009483s
-            Wholable    847.220k (± 2.5%) i/s -      4.236M in   5.003046s
+           Equalizer    816.137k (± 2.1%) i/s -      4.095M in   5.019957s
+           Equatable    818.224k (± 2.5%) i/s -      4.160M in   5.087009s
+            Wholable    818.497k (± 2.6%) i/s -      4.117M in   5.032917s
 
 Comparison:
-           Equatable:   869472.7 i/s
-            Wholable:   847220.2 i/s - same-ish: difference falls within error
-           Equalizer:   846000.1 i/s - same-ish: difference falls within error
+            Wholable:   818497.3 i/s
+           Equatable:   818224.3 i/s - same-ish: difference falls within error
+           Equalizer:   816137.5 i/s - same-ish: difference falls within error
