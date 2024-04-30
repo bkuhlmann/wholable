@@ -16,32 +16,6 @@ RSpec.shared_examples "a whole value object" do
     end
   end
 
-  describe "#==" do
-    it "answers true when values are equal" do
-      expect((whole == similar)).to be(true)
-    end
-
-    it "answers false when values are not equal" do
-      expect((whole == different)).to be(false)
-    end
-
-    it "answers false with different type" do
-      expect((whole == "other")).to be(false)
-    end
-  end
-
-  describe "#deconstruct" do
-    it "answers array" do
-      expect(whole.deconstruct).to eq(%w[test Test])
-    end
-  end
-
-  describe "#deconstruct_keys" do
-    it "answers hash" do
-      expect(whole.deconstruct_keys).to eq(name: "test", label: "Test")
-    end
-  end
-
   describe "#diff" do
     it "answers differences when two instances are not equal" do
       expect(similar.diff(different)).to eq(name: %w[test odd])
@@ -77,6 +51,20 @@ RSpec.shared_examples "a whole value object" do
 
     it "answers false when object IDs are different" do
       expect(whole.equal?(similar)).to be(false)
+    end
+  end
+
+  describe "#==" do
+    it "answers true when values are equal" do
+      expect((whole == similar)).to be(true)
+    end
+
+    it "answers false when values are not equal" do
+      expect((whole == different)).to be(false)
+    end
+
+    it "answers false with different type" do
+      expect((whole == "other")).to be(false)
     end
   end
 
@@ -125,6 +113,18 @@ RSpec.shared_examples "a whole value object" do
     it "answers new instance with complete changes" do
       modification = whole.with name: "mod", label: "Mod"
       expect(modification).to have_attributes(name: "mod", label: "Mod")
+    end
+  end
+
+  describe "#deconstruct" do
+    it "answers array" do
+      expect(whole.deconstruct).to eq(%w[test Test])
+    end
+  end
+
+  describe "#deconstruct_keys" do
+    it "answers hash" do
+      expect(whole.deconstruct_keys).to eq(name: "test", label: "Test")
     end
   end
 end

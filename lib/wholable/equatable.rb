@@ -13,7 +13,6 @@ module Wholable
     def included descendant
       super
       define_class_methods descendant
-      descendant.include Comparable
       descendant.prepend Freezable
     end
 
@@ -22,12 +21,14 @@ module Wholable
     attr_reader :keys
 
     def define_instance_methods
+      define_diff
+      define_eql
+      define_equality
       define_hash
       define_inspect
-      define_with
       define_to_a
       define_to_h
-      define_diff
+      define_with
     end
 
     def define_class_methods descendant
@@ -39,8 +40,23 @@ module Wholable
       descendant.alias_method :deconstruct_keys, :to_h
     end
 
-    def define_with
-      define_method(:with) { |**attributes| self.class.new(**to_h.merge!(attributes)) }
+    def define_diff
+      define_method :diff do |other|
+        if other.is_a? self.class
+          to_h.merge!(other.to_h) { |_, one, two| [one, two].uniq }
+              .select { |_, diff| diff.size == 2 }
+        else
+          to_h.each.with_object({}) { |(key, value), diff| diff[key] = [value, nil] }
+        end
+      end
+    end
+
+    def define_eql
+      define_method(:eql?) { |other| instance_of?(other.class) && hash == other.hash }
+    end
+
+    def define_equality
+      define_method(:==) { |other| other.is_a?(self.class) && hash == other.hash }
     end
 
     def define_hash local_keys = keys
@@ -74,15 +90,8 @@ module Wholable
       end
     end
 
-    def define_diff
-      define_method :diff do |other|
-        if other.is_a? self.class
-          to_h.merge!(other.to_h) { |_, one, two| [one, two].uniq }
-              .select { |_, diff| diff.size == 2 }
-        else
-          to_h.each.with_object({}) { |(key, value), diff| diff[key] = [value, nil] }
-        end
-      end
+    def define_with
+      define_method(:with) { |**attributes| self.class.new(**to_h.merge!(attributes)) }
     end
   end
 end
