@@ -12,7 +12,7 @@ Gem::Specification.new do |spec|
   spec.metadata = {
     "bug_tracker_uri" => "https://github.com/bkuhlmann/wholable/issues",
     "changelog_uri" => "https://alchemists.io/projects/wholable/versions",
-    "documentation_uri" => "https://alchemists.io/projects/wholable",
+    "homepage_uri" => "https://alchemists.io/projects/wholable",
     "funding_uri" => "https://github.com/sponsors/bkuhlmann",
     "label" => "Wholable",
     "rubygems_mfa_required" => "true",
