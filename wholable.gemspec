@@ -2,7 +2,7 @@
 
 Gem::Specification.new do |spec|
   spec.name = "wholable"
-  spec.version = "1.5.1"
+  spec.version = "1.5.2"
   spec.authors = ["Brooke Kuhlmann"]
   spec.email = ["brooke@alchemists.io"]
   spec.homepage = "https://alchemists.io/projects/wholable"
