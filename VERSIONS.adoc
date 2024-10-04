@@ -1,5 +1,9 @@
 = Versions
 
+== 1.5.3 (2024-10-04)
+
+* 🟢 Added gem deprecation warnings - Brooke Kuhlmann
+
 == 1.5.2 (2024-09-03)
 
 * 🟢 Added README Developer Certificate of Origin documentation - Brooke Kuhlmann
