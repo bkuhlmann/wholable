@@ -9,6 +9,11 @@ Gem::Specification.new do |spec|
   spec.summary = "A whole value object enabler."
   spec.license = "Hippocratic-2.1"
 
+  spec.post_install_message = <<~MESSAGE
+    DEPRECATION: The Wholable gem is deprecated and will be fully destroyed on 2025-01-10.
+    Please use the Wholeable gem instead: https://alchemists.io/projects/wholeable.
+  MESSAGE
+
   spec.metadata = {
     "bug_tracker_uri" => "https://github.com/bkuhlmann/wholable/issues",
     "changelog_uri" => "https://alchemists.io/projects/wholable/versions",

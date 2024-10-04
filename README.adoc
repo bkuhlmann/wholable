@@ -10,6 +10,8 @@
 
 = Wholable
 
+⚠️ *This gem is deprecated and will be fully destroyed on 2025-01-10. Please use the link:https://alchemists.io/projects/wholeable[Wholeable] gem instead because it's identical and fixes the spelling of the name.* ⚠️
+
 Wholable allows you to turn your object into a _whole value object_ by ensuring object equality is determined by the values of the object instead of by identity. Whole value objects -- or value objects in general -- have the following traits as also noted via link:https://en.wikipedia.org/wiki/Value_object[Wikipedia]:
 
 * Equality is determined by the values that make up an object and not by link:https://en.wikipedia.org/wiki/Identity_(object-oriented_programming)[identity] (i.e. memory address) which is the default behavior for all {ruby_link} objects except for {data_link} and {structs_link}.
